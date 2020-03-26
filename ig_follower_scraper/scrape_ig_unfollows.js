@@ -12,7 +12,7 @@ async function scrape(email, password) {
           '--ignore-certifcate-errors-spki-list',
           '--user-agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3312.0 Safari/537.36"'
         ],
-        headless: false,
+        headless: true,
     });
 
     const page = await browser.newPage()
@@ -23,10 +23,15 @@ async function scrape(email, password) {
     });
     await page.waitForSelector('#react-root > section > main > article > div.rgFsT > div:nth-child(1) > div > form > div:nth-child(2) > div > label > input', { timeout: 9000 })
     await page.type('#react-root > section > main > article > div.rgFsT > div:nth-child(1) > div > form > div:nth-child(2) > div > label > input', email)
+    await page.waitForSelector('div.-MzZI:nth-child(3) > div:nth-child(1) > label:nth-child(1) > input:nth-child(2)', { timeout: 9000 })
     await page.type('div.-MzZI:nth-child(3) > div:nth-child(1) > label:nth-child(1) > input:nth-child(2)', password)
+    await page.waitForSelector('.L3NKy > div:nth-child(1)', {timeout: 4000})
     await page.click('.L3NKy > div:nth-child(1)')
-    await page.waitForSelector('body > div.RnEpo.Yx5HN > div > div > div.mt3GC > button.aOOlW.HoLwm', { timeout: 4000})
-    await page.click('body > div.RnEpo.Yx5HN > div > div > div.mt3GC > button.aOOlW.HoLwm')
+    await page.waitForSelector('#react-root > section > nav > div._8MQSO.Cx7Bp > div > div > div.oJZym > a > div > div > img')
+    //if (await page.$('body > div.RnEpo.Yx5HN > div > div > div.mt3GC > button.aOOlW.HoLwm')) {
+      //await page.waitForSelector('body > div.RnEpo.Yx5HN > div > div > div.mt3GC > button.aOOlW.HoLwm')
+      //await page.click('body > div.RnEpo.Yx5HN > div > div > div.mt3GC > button.aOOlW.HoLwm')
+    //}
     await page.goto('https://www.instagram.com/trevorthegnar/')
     await page.click('#react-root > section > main > div > header > section > ul > li:nth-child(2) > a')
     await page.waitForSelector('body > div.RnEpo.Yx5HN > div > div.isgrP > ul > div > li')
@@ -60,7 +65,7 @@ async function scrape(email, password) {
       return elem.innerHTML
     })
     const findFollowers = await scrapeInfiniteScrollItems(page, extractFollowers, Number(follower_amount) - 1)
-    console.log(findFollowers, follower_amount);
+    //console.log(findFollowers, follower_amount);
 
     await page.waitForSelector('body > div.RnEpo.Yx5HN > div > div:nth-child(1) > div > div:nth-child(3) > button > svg')
     await page.click('body > div.RnEpo.Yx5HN > div > div:nth-child(1) > div > div:nth-child(3) > button > svg')
@@ -96,7 +101,7 @@ async function scrape(email, password) {
       return elem.innerHTML
     })
     const findFollowers2 = await scrapeInfiniteScrollItems2(page, extractFollowing, Number(following_amount) - 1)
-    console.log(findFollowers2, following_amount);
+    //console.log(findFollowers2, following_amount);
 
     await page.waitForSelector('body > div.RnEpo.Yx5HN > div > div:nth-child(1) > div > div:nth-child(3) > button > svg')
     await page.click('body > div.RnEpo.Yx5HN > div > div:nth-child(1) > div > div:nth-child(3) > button > svg')
@@ -108,7 +113,7 @@ async function scrape(email, password) {
         unfollowers.push(findFollowers2[i])
       }
     }
-    console.log('Made it', unfollowers)
+    console.log('Unfollowers:\n', unfollowers)
 
 } catch (error) {
     console.log(error)

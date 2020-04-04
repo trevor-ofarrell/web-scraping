@@ -1,5 +1,5 @@
 const fs = require('fs');
-const scraper = require('./scraper.js')
+const scraper = require('./googleSheetScraper.js')
 const parse = require('./parse.js')
 const filePath = './new_data.csv'
 var shell = require('shelljs');
@@ -14,7 +14,7 @@ async function scrapeIndiana() {
   
   try {
     // call puppeteer scraper to download CSV file from the google sheet
-    await scraper.scrape()
+    await scraper.downloadCSV()
   } catch(e) {
     console.error(e)
   }

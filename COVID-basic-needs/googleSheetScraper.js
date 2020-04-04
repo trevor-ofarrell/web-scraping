@@ -4,7 +4,7 @@ const puppeteer = require('puppeteer-extra');
 // API due to the sheet not being published.
 // Author -  Trevor O'Farrell
 
-async function scrape() {
+async function downloadCSV() {
     try {
       const browser = await puppeteer.launch({
         executablePath: '/usr/bin/google-chrome-stable',
@@ -47,5 +47,5 @@ async function scrape() {
 
   
 module.exports = {
-    scrape
+    downloadCSV
 }

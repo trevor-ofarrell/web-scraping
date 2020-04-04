@@ -2,6 +2,7 @@ const csv = require('csvtojson')
 const fs = require('fs');
 const shell = require('shelljs');
 const time = require('./getDateTime.js')
+const csvjson = require('csvjson');
 
 // script that converts CSV file to JSON, formats the objects,
 // then writes them to a file.
@@ -23,12 +24,12 @@ const parseCsvToJson = (path) => {
                     days = site_data[i]['Days'].split("").join(", ").replace('R', 'Th')
                 }
                 
-                let date = site_data[i]['Street'] + ', ' + site_data[i]['City'] + ', Indiana ' + site_data[i]['Zip Code']
+                let adderess = site_data[i]['Street'] + ', ' + site_data[i]['City'] + ', Indiana ' + site_data[i]['Zip Code']
 
                 let item = {
                     sponsorName: site_data[i]['Sponsor Name'],
                     siteName: site_data[i]['Site Name'],
-                    siteAddress: date,
+                    siteAddress: String(adderess),
                     siteState: 'Indiana',
                     contactPhone: String(site_data[i]['ContactPhone']).replace(/\D+/g, ""),
                     contactEmail: site_data[i]['Email'],
@@ -55,6 +56,21 @@ const parseCsvToJson = (path) => {
         fs.writeFile('indiana_data.json', JSON.stringify(formated_data, null, 4), function (err) {
             if (err) return console.log(err);
         })
+        
+        fs.readFile('./indiana_data.json', 'utf-8', (err, fileContent) => {
+            if (err) {
+                throw new Error(err);
+            }
+            const csvData = csvjson.toCSV(fileContent, {
+                headers: 'key'
+            });
+            fs.writeFile('./final_data.csv', csvData, (err) => {
+                if(err) {
+                    throw new Error(err);
+                }
+                console.log('Success!');
+            });
+        });
     })
 }
 
